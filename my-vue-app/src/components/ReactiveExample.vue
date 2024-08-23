@@ -24,7 +24,7 @@
 <script setup>
 import { reactive, computed, ref, watch } from 'vue';
 
-// Изначальный список людей
+
 const people = reactive([
   { id: 1, firstName: 'Aiden', lastName: 'Miller', age: 24 },
   { id: 2, firstName: 'Emma', lastName: 'Johnson', age: 29 },
@@ -38,7 +38,7 @@ const selectedPerson = ref(null);
 const newAge = ref(null);
 const ageError = ref('');
 
-// Обчислювальне свойство для фильтрации списка объектов
+
 const filteredPeople = computed(() => {
   return people.filter(person => 
     person.firstName.toLowerCase().includes(searchQuery.value.toLowerCase()) || 
@@ -46,14 +46,14 @@ const filteredPeople = computed(() => {
   );
 });
 
-// Метод для выбора человека и подготовки к изменению возраста
+
 const selectPerson = (person) => {
   selectedPerson.value = person;
   newAge.value = person.age;
   ageError.value = '';
 };
 
-// Метод для изменения возраста с проверкой на соответствие правилам
+
 const updateAge = () => {
   if (newAge.value >= 18) {
     selectedPerson.value.age = newAge.value;
@@ -63,7 +63,6 @@ const updateAge = () => {
   }
 };
 
-// Метод для валидации возраста при вводе
 const validateAge = (event) => {
   const age = event.target.value;
   if (age < 18) {
@@ -73,7 +72,7 @@ const validateAge = (event) => {
   }
 };
 
-// Метод для добавления случайного человека из API
+
 const addRandomPerson = async () => {
   try {
     const response = await fetch('https://randomuser.me/api/');
@@ -83,7 +82,7 @@ const addRandomPerson = async () => {
       id: Date.now(),
       firstName: randomPerson.name.first,
       lastName: randomPerson.name.last,
-      age: Math.floor(Math.random() * 50) + 18  // Возраст от 18 до 67
+      age: Math.floor(Math.random() * 50) + 18 
     };
     people.push(newPerson);
   } catch (error) {
@@ -93,14 +92,13 @@ const addRandomPerson = async () => {
 
 
 
-// Watcher для отслеживания изменений в selectedPerson
 watch(selectedPerson, (newVal, oldVal) => {
   if (newVal) {
     console.log(`Выбран новый человек: ${newVal.firstName} ${newVal.lastName}`);
   }
 });
 
-// Watcher для отслеживания изменений возраста
+
 watch(newAge, (newVal) => {
   if (newVal < 18) {
     ageError.value = 'Возраст не может быть меньше 18 лет';
@@ -110,7 +108,6 @@ watch(newAge, (newVal) => {
 });
 
 
-// Watcher, который реагирует на изменения в computed property
 watch(filteredPeople, (newVal) => {
   console.log('Отфильтрованный список обновлен', newVal);
 });
