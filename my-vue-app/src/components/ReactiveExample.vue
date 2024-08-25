@@ -12,12 +12,10 @@
 
     <button @click="addRandomPerson">Добавить случайного человека</button>
 
-    <div v-if="selectedPerson">
+    <div v-if="selectedPerson && !isAgeUpdated">
       <h2>Добавлен возраст {{ selectedPerson.firstName }} {{ selectedPerson.lastName }}</h2>
-      <div v-if="!isAgeUpdated">
-        <input v-model="newAge" type="number" @input="validateAge" />
-        <button @click="updateAge">Обновить возраст</button>
-      </div>
+      <input v-model="newAge" type="number" @input="validateAge" />
+      <button @click="updateAge">Обновить возраст</button>
       <p v-if="ageError" :style="{ color: newAge.value < 18 ? 'red' : 'green' }">{{ ageError }}</p>
     </div>
   </div>
@@ -38,7 +36,7 @@ const searchQuery = ref('');
 const selectedPerson = ref(null);
 const newAge = ref(null);
 const ageError = ref('');
-const isAgeUpdated = ref(false); // Флаг для отслеживания обновления возраста
+const isAgeUpdated = ref(false); 
 
 const filteredPeople = computed(() => {
   return people.filter(person =>
@@ -63,14 +61,14 @@ const selectPerson = (person) => {
   selectedPerson.value = person;
   newAge.value = person.age;
   ageError.value = '';
-  isAgeUpdated.value = false; // Сброс флага при выборе нового человека
+  isAgeUpdated.value = false; 
 };
 
 const updateAge = () => {
   if (newAge.value >= 18) {
     selectedPerson.value.age = newAge.value;
     ageError.value = '';
-    isAgeUpdated.value = true; // Устанавливаем флаг, чтобы скрыть поле ввода и кнопку
+    isAgeUpdated.value = true; 
   } else {
     ageError.value = 'Возраст не может быть меньше 18 лет';
   }
